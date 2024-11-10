@@ -29,21 +29,20 @@ There are all questions as follows:
 2. The user's profile is not necessary. If there is no profile, there is no need to consider it.
 3. If user's profile not fit the question instructions, just select the next question.
 3. The text between <> are question instructions, you must understand and follow thoses instructions.
-4. Don’t mention section number, question number and instructions in message. 
+4. Don’t mention question order and instructions in message. 
 5. Ask questions more like a human being
 6. Don't let user know your thinking progress
 7. Output format must be in json like: {"next_question": String}
 8. If no more question, left "next_question" property empty
-9. Current question is not necessary. If there is no current question, choose the first question as next question
 '''%(questions)
 
 
 def survey_guide_agent(preview_question, user_profile=""):
     msg = [{
         "role": "user",
-        "content": f"[preview question]: {preview_question} \n [user profile]: {user_profile}"
+        "content": f"[current question]: {preview_question} \n [user profile]: {user_profile}"
     }]
-    resp = query_llm.query_llm(model_name='llama3.1:8b', system_prompt=angent_prompt, messages=msg)
+    resp = query_llm.query_llm(model_name='llama3:8b', system_prompt=angent_prompt, messages=msg)
     # print(resp)
     resp_msg = resp['message']['content']
     resp_data = json.loads(resp_msg)

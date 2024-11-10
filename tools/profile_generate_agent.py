@@ -7,7 +7,9 @@ angent_prompt = '''
     2. No explanation is needed, just output profile
 '''
 def profile_generate_agent(messages):
-    resp = query_llm.query_llm(model_name='llama3.1:8b', system_prompt=angent_prompt, messages=messages)
+    resp = query_llm.query_llm(model_name='llama3:8b', system_prompt=angent_prompt, messages=messages)
     resp_msg = resp['message']['content']
+    print("========================")
     print(f"profile: {resp_msg}")
+    print("========================")
     return resp_msg
