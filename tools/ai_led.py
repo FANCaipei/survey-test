@@ -44,7 +44,7 @@ questions = [
     },
     {
         "question": "When was your last COVID booster?",
-        "condition": "user has received the COVID-19 vaccine"
+        "condition": "user has received the COVID-19 vaccine and any recommended boosters"
     }
 ]
 
@@ -71,7 +71,7 @@ def append_msg(question, answer, uid):
         "content": f"[question:] {question} [answer]: {answer}"
     })
     # temp append to profile
-    temp_db[uid]["profile"] += f"{question}: {answer}\n"
+    temp_db[uid]["profile"] += f"[question]:{question}, [user answer]: {answer}\n"
     print("=======================")
     print(f"profile: \n{temp_db[uid]['profile']}")
     print("=======================")

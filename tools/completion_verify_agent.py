@@ -5,8 +5,22 @@ The user will send you a question and its answer.
 Questions are limited to the medical field.
 Your task is to verify whether the answer is logically correct.
 
+**rule**:
+* When question is about time, if answer contains time info, return TRUE
+* When question is a yes or no question, if answer logically mean yes or no, return TRUE
+
 **output format**:
 Boolean value between 'TRUE' and 'FALSE' . No other output accepted
+
+**examples:**
+example 1:
+[Question]: Have you had the latest flu shot?
+[Answer]: no
+[output]: TRUE
+example 2:
+[Question]: Have you ever got fever?
+[Answer]: yes
+[output]: TRUE
 '''
 def completion_verify_agent(question,answer):
     msg = [{
