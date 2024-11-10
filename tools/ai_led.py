@@ -1,52 +1,10 @@
 from tools import completion_verify_agent, survey_guide_agent, profile_generate_agent, questionnaire_agent
+import json
 import asyncio
 
-questions = [
-    {
-        "question": "Have you had the latest flu shot?",
-        "condition": "true"
-    },
-    {
-        "question": "When have you had the latest flu shot?",
-        "condition": "user had latest flu shot"
-    },
-    {
-        "question": "Have you ever received a pneumonia vaccine?",
-        "condition": "true"
-    },
-    {
-        "question": "Do you know which one?",
-        "condition": "user has received a pneumonia vaccine"
-    },
-    {
-        "question": "When did you receive it?",
-        "condition": "user has received a pneumonia vaccine"
-    },
-    {
-        "question": "Have you had the 2 doses of shingles vaccine?",
-        "condition": "true"
-    },
-    {
-        "question": "When did you have the 2 doses of shingles vaccine?",
-        "condition": "user had received the 2 doses of shingles vaccine"
-    },
-    {
-        "question": "Did you receive a tetanus, diphtheria, and pertussis (Tdap) booster within the last 10 years?",
-        "condition": "true"
-    },
-    {
-        "question": "When did you receive a tetanus, diphtheria, and pertussis (Tdap) booster?",
-        "condition": "user had receive a tetanus, diphtheria, and pertussis (Tdap) booster within the last 10 years"
-    },
-    {
-        "question": "Have you received the COVID-19 vaccine and any recommended boosters?",
-        "condition": "true"
-    },
-    {
-        "question": "When was your last COVID booster?",
-        "condition": "user has received the COVID-19 vaccine and any recommended boosters"
-    }
-]
+questions = []
+with open('./questions.json') as f:
+    questions = json.load(f)
 
 temp_db = {}
 
