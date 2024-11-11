@@ -1,4 +1,4 @@
-from tools import completion_verify_agent, survey_guide_agent, profile_generate_agent, questionnaire_agent
+from tools import completion_verify_agent, survey_guide_agent, profile_generate_agent, questionnaire_agent,questionnaire_agent_v2
 import json
 import asyncio
 
@@ -8,36 +8,59 @@ with open('./questions.json') as f:
 
 temp_db = {}
 
-def generate_next_question(question, answer, uid):
-    is_answer_valid = completion_verify_agent.completion_verify_agent(question, answer)
-    if is_answer_valid:
-        append_msg(question, answer, uid)
-        next_question = survey_guide_agent.survey_guide_agent(preview_question=question,user_profile=temp_db[uid]["profile"])
-        if len(next_question) > 0:
-            return next_question
-        else:
-            return 'Finished' 
-    else:
-        return question
+# def generate_next_question(question, answer, uid):
+#     is_answer_valid = completion_verify_agent.completion_verify_agent(question, answer)
+#     if is_answer_valid:
+#         append_survey(question, answer, uid)
+#         next_question = survey_guide_agent.survey_guide_agent(preview_question=question,user_profile=temp_db[uid]["profile"])
+#         if len(next_question) > 0:
+#             return next_question
+#         else:
+#             return 'Finished' 
+#     else:
+#         return question
 
-def append_msg(question, answer, uid):
+def append_survey(question_id, question, answer, uid):
     # TODO: store in database
     if uid not in temp_db:
-        temp_db[uid] = {"messages": [], "profile": ''}
-    temp_db[uid]["messages"].append({
-        "role": "user",
-        "content": f"[question:] {question} [answer]: {answer}"
+        temp_db[uid] = {"survey": []}
+    temp_db[uid]["survey"].append({
+        "id": question_id,
+        "question": question,
+        "answer": answer
     })
-    # temp append to profile
-    temp_db[uid]["profile"] += f"[question]:{question}, [user answer]: {answer}\n"
     print("=======================")
-    print(f"profile: \n{temp_db[uid]['profile']}")
+    print(f"current survey: \n{temp_db[uid]['survey']}")
     print("=======================")
-    # asyncio.run(update_user_profile(uid))
 
 async def update_user_profile(uid):
-    profile = profile_generate_agent.profile_generate_agent(temp_db[uid]["messages"])
+    profile = profile_generate_agent.profile_generate_agent(temp_db[uid]["survey"])
     temp_db[uid]["profile"] = profile
+
+def find_target_question_in_user_history(uid, question_id):
+    if uid in temp_db:
+        if "survey" in temp_db[uid]:
+            return next((item for item in temp_db[uid]["survey"] if item['id'] == question_id), None)
+    return None
+
+def should_ask_the_question(question_item, uid):
+    if "conditions" not in question_item:
+        return True
+    
+    # generate condition based question answers
+    condition_base_text = ''
+    for cond in question_item['conditions']:
+        expected_answer_text = cond['expected_answer']
+        base_question = find_target_question_in_user_history(uid, cond['condition_question_id'])
+        if base_question is not None:
+            condition_base_text += f"[question]:{base_question['question']},[answer]:{base_question['answer']},[expected]:{expected_answer_text}\n"
+    
+    if len(condition_base_text) <= 0:
+        # means no base questions base questions has been asked, so should not ask this question
+        return False
+    
+    return questionnaire_agent_v2.questionnaire_agent_v2(condition_base_text)
+
 
 def start():
     uid = 'test'
@@ -46,21 +69,17 @@ def start():
     while current_question_index < len(questions):
         q_item = questions[current_question_index]
 
-        u_profile = ""
-        if uid in temp_db:
-            if "profile" in temp_db[uid]:
-                u_profile = temp_db[uid]["profile"]
-
-        should_ask = True if repeat_asked_question is True else questionnaire_agent.questionnaire_agent(question=q_item['question'], condition=q_item['condition'], user_profile=u_profile)
+        should_ask = True if repeat_asked_question is True else should_ask_the_question(q_item, uid)
         if not should_ask:
             current_question_index += 1
             repeat_asked_question = False
+            print(f"should not ask question: {q_item['question']}")
             continue
         else:
             answer = input(f"{q_item['question']} \n")
             is_answer_valid = completion_verify_agent.completion_verify_agent(q_item['question'], answer)
             if is_answer_valid:
-                append_msg(question=q_item['question'], answer=answer,uid=uid)
+                append_survey(question_id=q_item['id'] ,question=q_item['question'], answer=answer,uid=uid)
                 current_question_index += 1
                 repeat_asked_question = False
             else:

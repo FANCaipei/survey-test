@@ -10,7 +10,7 @@ Your task is to verify whether the answer is logically correct.
 * When question is a yes or no question, if answer logically mean yes or no, return TRUE
 
 **output format**:
-Boolean value between 'TRUE' and 'FALSE' . No other output accepted
+Boolean value between 'TRUE' and 'FALSE'. No other output accepted
 
 **examples:**
 example 1:
@@ -27,7 +27,7 @@ def completion_verify_agent(question,answer):
         "role": "user",
         "content": f"[question]: {question} \n [answer]: {answer}"
     }]
-    resp = query_llm.query_llm(model_name='llama3:8b', system_prompt=angent_prompt, messages=msg)
+    resp = query_llm.query_llm(model_name='llama3.1:8b', system_prompt=angent_prompt, messages=msg)
     resp_msg = resp['message']['content']
     if 'TRUE' in resp_msg:
         return True

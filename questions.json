@@ -1,46 +1,146 @@
 [
     {
-        "question": "Have you had the latest flu shot?",
-        "condition": "true"
+        "id": 0,
+        "question": "Please spell your full name."
     },
     {
-        "question": "When have you had the latest flu shot?",
-        "condition": "user had latest flu shot"
+        "id": 1,
+        "question": "Please spell your date of birth."
     },
     {
-        "question": "Have you ever received a pneumonia vaccine?",
-        "condition": "true"
+        "id": 2,
+        "question": "Please specify your gender. such as Male, Female."
     },
     {
-        "question": "Do you know which one?",
-        "condition": "user has received a pneumonia vaccine"
+        "id": 3,
+        "question": "Please say and spell the name of your primary care physician."
     },
     {
-        "question": "When did you receive it?",
-        "condition": "user has received a pneumonia vaccine"
+        "id": 4,
+        "question": "Do you have any other physicians that you see regularly?"
     },
     {
-        "question": "Have you had the 2 doses of shingles vaccine?",
-        "condition": "true"
+        "id": 5,
+        "question": "Please say and spell the name of other physicians that you see and include the specialty. For example, Dr. Smith, S M I T H, cardiology.",
+        "conditions": [
+            {
+                "condition_question_id": 4,
+                "expected_answer": "answer means yes"
+            }
+        ]
     },
     {
-        "question": "When did you have the 2 doses of shingles vaccine?",
-        "condition": "user had received the 2 doses of shingles vaccine"
+        "id": 6,
+        "question": "Do you see any other physicians?",
+        "conditions": [
+            {
+                "condition_question_id": 4,
+                "expected_answer": "answer means yes"
+            }
+        ],
+        "repeat_base_on_answer": "If answer is not no"
     },
     {
-        "question": "Did you receive a tetanus, diphtheria, and pertussis (Tdap) booster within the last 10 years?",
-        "condition": "true"
+        "id": 7,
+        "question": "What medical conditions are you treated for?",
+        "repeat_base_on_answer": "If answer is not none"
     },
     {
-        "question": "When did you receive a tetanus, diphtheria, and pertussis (Tdap) booster?",
-        "condition": "user had receive a tetanus, diphtheria, and pertussis (Tdap) booster within the last 10 years"
+        "id": 8,
+        "question": "Have you had any surgery in the past?"
     },
     {
-        "question": "Have you received the COVID-19 vaccine and any recommended boosters?",
-        "condition": "true"
+        "id": 9,
+        "question": "What type of surgery?",
+        "conditions": [
+            {
+                "condition_question_id": 8,
+                "expected_answer": "answer means yes"
+            }
+        ]
     },
     {
-        "question": "When was your last COVID booster?",
-        "condition": "user has received the COVID-19 vaccine and any recommended boosters"
+        "id": 10,
+        "question": "Any other surgeries?",
+        "conditions": [
+            {
+                "condition_question_id": 8,
+                "expected_answer": "answer means yes"
+            }
+        ],
+        "repeat_base_on_answer": "If answer is not no"
+    },
+    {
+        "id": 11,
+        "question": "Have you been hospitalized in the past?"
+    },
+    {
+        "id": 12,
+        "question": "When were you hospitalized and for what conditions?",
+        "conditions": [
+            {
+                "condition_question_id": 11,
+                "expected_answer": "answer means yes"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "question": "Any other hospitalizations?",
+        "conditions": [
+            {
+                "condition_question_id": 11,
+                "expected_answer": "answer means yes"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "question": "When and for what condition?",
+        "conditions": [
+            {
+                "condition_question_id": 13,
+                "expected_answer": "answer means yes"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "question": "Do you take prescription medications?"
+    },
+    {
+        "id": 16,
+        "question": "Which prescription medication do you take? It's ok to spell them out. Be sure to tell me the dosage and how many times a day you take it?",
+        "conditions": [
+            {
+                "condition_question_id": 15,
+                "expected_answer": "answer means yes"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "question": "Any other medication?",
+        "conditions": [
+            {
+                "condition_question_id": 15,
+                "expected_answer": "answer means yes"
+            }
+        ],
+        "repeat_base_on_answer": "If answer is not no"
+    },
+    {
+        "id": 18,
+        "question": "Are you allergic to any medication?"
+    },
+    {
+        "id": 19,
+        "question": "Which one",
+        "conditions": [
+            {
+                "condition_question_id": 18,
+                "expected_answer": "answer means yes"
+            }
+        ]
     }
 ]
